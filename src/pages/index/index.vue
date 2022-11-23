@@ -115,14 +115,14 @@ const moveDrag = (event: any) => {
   transform: translateY(80px) rotateX(-90deg);
 }
 
-/* @keyframes containMove {
+@keyframes containMove {
   from {
     right: -50%;
   }
   to {
     right: 50%;
   }
-} */
+}
 
 @keyframes run {
   0% {
