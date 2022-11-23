@@ -1,11 +1,16 @@
 <template>
   <view class="content">
-    <!-- <image class="logo" src="/static/logo.png" />
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
-    </view> -->
+    <view>{{ initDeg }}</view>
     <view class="container bg-dark-100">
-      <view class="box">
+      <view
+        class="box"
+        @touchstart="startDrag"
+        @touchmove="moveDrag"
+        :style="{
+          transform: `translate(-50%, -50%) rotateZ(0) rotateX(-10deg) rotateY(${initDeg}deg)`,
+          background: 'red',
+        }"
+      >
         <view class="b-noodle a1">a1</view>
         <!-- 前 -->
         <view class="b-noodle a2">a2</view>
@@ -25,7 +30,18 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-const title = ref("Hello");
+
+const initDeg = ref<number>(0);
+const initStartDeg = ref<number>(0);
+
+const startDrag = (event: any): any => {
+  initStartDeg.value = event.touches[0].clientX;
+};
+
+const moveDrag = (event: any) => {
+  let currentTouchX = event.touches[0].clientX;
+  initDeg.value = currentTouchX - initStartDeg.value;
+};
 </script>
 
 <style>
@@ -37,74 +53,89 @@ const title = ref("Hello");
 }
 
 .container {
-  height: 500px;
-  background: #eee;
+  height: 300px;
   perspective: 500px; /* 设置透视距离 */
+  position: absolute;
+  top: 0;
+  animation: containMove 0.5s ease-in;
 }
 
 /* x和y轴在屏幕上分别表现为左右和上下，z轴表示视觉上与我们的距离远近 */
 .box {
-  width: 200px;
+  width: 160px;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotateZ(10deg) rotateX(-30deg);
+  /* transform: translate(-50%, -50%) rotateY(-10deg); */
   /* border: 1px solid #000; */
   transform-style: preserve-3d;
-  animation: run 5s linear;
-  animation-iteration-count: infinite;
+  animation: run 2.5s ease-out;
+  /* animation-iteration-count: infinite; */
+  /* 动画终止 */
+  /* animation-fill-mode: forwards; */
 }
 
+
 .b-noodle {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
   position: absolute;
   text-align: center;
-  line-height: 200px;
+  line-height: 160px;
   font-size: 30px;
 }
 
 .a1 {
-  background: rgba(0, 0, 255, 0.5);
-  transform: translateZ(100px);
+  background: #a82dff;
+  transform: translateZ(80px);
 }
 
 .a2 {
-  background: rgba(0, 0, 255, 0.5);
-  transform: translateZ(-100px) rotateY(180deg);
+  background: #504ad9;
+  transform: translateZ(-80px) rotateY(180deg);
 }
 
 .b1 {
-  background: rgba(0, 255, 0, 0.5);
-  transform: translateX(-100px) rotateY(-90deg);
+  background: #5da4f0;
+  transform: translateX(-80px) rotateY(-90deg);
 }
 
 .b2 {
-  background: rgba(0, 255, 0, 0.5);
-  transform: translateX(100px) rotateY(90deg);
+  background: #d98c4a;
+  transform: translateX(80px) rotateY(90deg);
 }
 
 .c1 {
-  background: rgba(255, 0, 0, 0.5);
-  transform: translateY(-100px) rotateX(90deg);
+  background: #61faa3;
+  transform: translateY(-80px) rotateX(90deg);
 }
 
 .c2 {
-  background: rgba(255, 0, 0, 0.5);
-  transform: translateY(100px) rotateX(-90deg);
+  background: #facf61;
+  transform: translateY(80px) rotateX(-90deg);
 }
+
+/* @keyframes containMove {
+  from {
+    right: -50%;
+  }
+  to {
+    right: 50%;
+  }
+} */
 
 @keyframes run {
   0% {
-    transform: translate(-50%, -50%) rotateZ(10deg) rotateX(-30deg) rotateY(0);
+    transform: translate(-50%, -50%) rotateZ(0) rotateX(-10deg) rotateY(0);
+  }
+  25% {
+    transform: translate(-50%, -50%) rotateZ(0) rotateX(-10deg) rotateY(360deg);
   }
   50% {
-    transform: translate(-50%, -50%) rotateZ(10deg) rotateX(-30deg)
-      rotateY(180deg);
+    transform: translate(-50%, -50%) rotateZ(0) rotateX(-10deg) rotateY(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotateZ(10deg) rotateX(-30deg)
-      rotateY(360deg);
+    transform: translate(-50%, -50%) rotateZ(0) rotateX(-10deg) rotateY(360deg);
   }
 }
 </style>
